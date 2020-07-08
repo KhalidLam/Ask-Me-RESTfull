@@ -18,8 +18,10 @@ use Illuminate\Http\Request;
 // });
 
 
+// Auth Route
 Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
+
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'API\UserController@details');
     Route::resource('questions', 'QuestionsController')->except(['index', 'show']);

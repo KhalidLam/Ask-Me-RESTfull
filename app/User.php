@@ -38,8 +38,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // Relationship methods
     public function questions()
     {
         return $this->hasMany('App\Question');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany('App\Answer');
     }
 }

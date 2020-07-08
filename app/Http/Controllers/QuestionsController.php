@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Gate;
 
 class QuestionsController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *

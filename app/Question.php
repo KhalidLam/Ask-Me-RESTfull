@@ -10,9 +10,15 @@ class Question extends Model
     //
     protected $fillable = ['title', 'body'];
 
+    // Relationship methods
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany('App\Answer');
     }
 
     // Accessor Helper Methods

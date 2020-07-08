@@ -10,7 +10,7 @@ use Illuminate\Auth\Access\Response;
 class QuestionPolicy
 {
     use HandlesAuthorization;
-
+    
     /**
      * Determine whether the user can view any questions.
      *
