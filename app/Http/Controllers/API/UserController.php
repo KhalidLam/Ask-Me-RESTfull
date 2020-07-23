@@ -21,9 +21,10 @@ class UserController extends Controller
     public function login()
     {
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
-            $user = Auth::user();
-            $success['token'] =  $user->createToken('MyApp')->accessToken;
-            return response()->json(['result' => $success], $this->successStatus);
+            $user  = Auth::user();
+            $token = $user->createToken('AuthToken')->accessToken;
+            $user['access_token'] = $token;
+            return response()->json(['result' => $user], $this->successStatus);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
@@ -42,16 +43,31 @@ class UserController extends Controller
             'password' => 'required',
             'c_password' => 'required|same:password',
         ]);
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
+
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->name;
-        return response()->json(['success' => $success], $this->successStatus);
+
+        $token =  $user->createToken('AuthToken')->accessToken;
+        $user['access_token'] = $token;
+        // $success['user'] =  $user;
+
+        return response()->json(['result' => $user], $this->successStatus);
     }
+
+
+    public function logout()
+    {
+        // Auth::user()->token()->revoke();
+        Auth::user()->token()->delete();
+
+        return response()->json(['result' => ['message' => "The Token has been deleted"]], $this->successStatus);
+    }
+
 
     /**
      * details api
@@ -61,7 +77,7 @@ class UserController extends Controller
     public function details()
     {
         $user = Auth::user();
-        return response()->json(['success' => $user], $this->successStatus);
+        return response()->json(['result' => $user], $this->successStatus);
     }
 
     /**

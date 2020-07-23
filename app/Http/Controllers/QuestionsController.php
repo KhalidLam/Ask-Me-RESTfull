@@ -18,8 +18,7 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        $questions = Question::with('user')->latest()->paginate(5);
-
+        $questions = Question::with('user')->latest()->paginate(10);
         return response()->json($questions);
     }
 
@@ -41,6 +40,16 @@ class QuestionsController extends Controller
      */
     public function store(AskQuestionRequest $request)
     {
+        // Check if user exist
+        // if (Auth::guard('api')->check()) {
+        //     return response()->json([
+        //         'message' => 'You can create Question ',
+        //     ], 200);
+        // } else {
+        //     return response()->json([
+        //         'message' => 'Your can not create Question before login',
+        //     ], 401);
+        // }
 
         $question = Auth::user()->questions()->create($request->only('title', 'body'));
         return response()->json([
@@ -131,7 +140,5 @@ class QuestionsController extends Controller
                 'message' => $resp->message(),
             ]);
         }
-
-
     }
 }

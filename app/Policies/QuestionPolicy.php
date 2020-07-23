@@ -10,41 +10,8 @@ use Illuminate\Auth\Access\Response;
 class QuestionPolicy
 {
     use HandlesAuthorization;
+
     
-    /**
-     * Determine whether the user can view any questions.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the question.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Question  $question
-     * @return mixed
-     */
-    public function view(User $user, Question $question)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create questions.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function create(User $user)
-    {
-        //
-    }
-
     /**
      * Determine whether the user can update the question.
      *
@@ -68,7 +35,7 @@ class QuestionPolicy
      */
     public function delete(User $user, Question $question)
     {
-        return $user->id == $question->user_id && $question->answers < 1
+        return $user->id == $question->user_id && $question->answers_count < 1
             ? Response::allow()
             : Response::deny("You can't delete this question");
     }
