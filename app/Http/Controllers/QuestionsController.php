@@ -18,7 +18,10 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        $questions = Question::with('user')->latest()->paginate(10);
+
+        //  $questions = Question::with('user')->get()->shuffle();
+        $questions = Question::with('user')->latest()->get();
+        // $questions = Question::with('user')->latest()->paginate(15);
         return response()->json($questions);
     }
 
@@ -81,7 +84,7 @@ class QuestionsController extends Controller
     public function show(Question $question)
     {
         $question->increment('views');
-
+        $question->user;
         return response()->json($question, 200);
     }
 
@@ -128,17 +131,18 @@ class QuestionsController extends Controller
      */
     public function destroy(Question $question)
     {
+
         $resp = Gate::inspect('delete', $question);
 
         // For Api
         if ($resp->allowed() && $question->delete()) {
             return response()->json([
                 'message' => 'Your question has been deleted',
-            ]);
+            ], 200);
         } else {
             return response()->json([
                 'message' => $resp->message(),
-            ]);
+            ], 401);
         }
     }
 }
