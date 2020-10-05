@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Answer extends Model
 {
+
+    protected $fillable = ["question_id", "body", "user_id"];
+    protected $with = ['user'];
+
     // Relationship methods
     public function user()
     {
@@ -23,6 +27,10 @@ class Answer extends Model
 
         static::created(function ($answer) {
             $answer->question->increment('answers_count');
+        });
+
+        static::deleted(function ($answer) {
+            $answer->question->decrement('answers_count');
         });
     }
 

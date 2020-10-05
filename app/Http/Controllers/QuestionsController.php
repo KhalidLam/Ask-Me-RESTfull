@@ -21,7 +21,7 @@ class QuestionsController extends Controller
 
         //  $questions = Question::with('user')->get()->shuffle();
         $questions = Question::with('user')->latest()->get();
-        // $questions = Question::with('user')->latest()->paginate(15);
+        // $questions = Question::with('user')->latest()->paginate(10);
         return response()->json($questions);
     }
 

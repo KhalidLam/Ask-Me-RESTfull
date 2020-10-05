@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Answer;
+use App\Question;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
@@ -33,9 +34,27 @@ class AnswerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    // public function store(Request $request)
+    // {
+
+    // }
+    public function store(Question $question, Request $request)
     {
-        //
+
+        $request->validate([
+            'body'=>'required',
+        ]);
+
+        $input = $request->all();
+        $input['user_id'] = auth()->user()->id;
+
+        $answer = $question->answers()->create($input);
+
+        return response()->json([
+            'message' => 'Your Answer has been Stored.',
+            'result' => $answer
+        ], 200);
+
     }
 
     /**
@@ -44,9 +63,10 @@ class AnswerController extends Controller
      * @param  \App\Answer  $answer
      * @return \Illuminate\Http\Response
      */
-    public function show(Answer $answer)
+    public function show(Question $question)
     {
-        //
+        $answers = $question->answers;
+        return response()->json($answers, 200);
     }
 
     /**
@@ -80,6 +100,17 @@ class AnswerController extends Controller
      */
     public function destroy(Answer $answer)
     {
-        //
+        // $this->authorize('delete', $answer);
+
+        if ( $answer->delete()) {
+            return response()->json([
+                'message' => 'Your answer has been deleted',
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => $resp->message(),
+            ], 401);
+        }
+
     }
 }

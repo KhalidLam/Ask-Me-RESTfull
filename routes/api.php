@@ -40,9 +40,25 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     // Question Route
     Route::resource('questions', 'QuestionsController')->except(['index', 'show']);
+
+    // Comments Route
+    Route::post('/comments', 'CommentController@store')->name('comments.store');
+    Route::delete('/comments/{comment}', 'CommentController@destroy')->name('comments.destroy');
+
+    // Answers Route
+    Route::post('/answers/{slug}', 'AnswerController@store')->name('answers.store');
+    Route::delete('/answers/{answer}', 'AnswerController@destroy')->name('answers.destroy');
+
 });
 
 
 // Question Route
 Route::get('/questions', 'QuestionsController@index')->name('questions.index');
 Route::get('/questions/{slug}', 'QuestionsController@show')->name('questions.show');
+
+// Comments Route
+Route::get('/comments/{slug}', 'CommentController@show')->name('comments.show');
+
+// Answers Route
+Route::get('/answers/{slug}', 'AnswerController@show')->name('answers.show');
+

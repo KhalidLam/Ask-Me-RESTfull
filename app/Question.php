@@ -7,8 +7,11 @@ use Illuminate\Support\Str;
 
 class Question extends Model
 {
+
     //
     protected $fillable = ['title', 'body'];
+    // protected $with = ['comments'];
+
 
     // Relationship methods
     public function user()
@@ -21,10 +24,16 @@ class Question extends Model
         return $this->hasMany('App\Answer');
     }
 
+    public function comments()
+    {
+        return $this->hasMany('App\Comment')->whereNull('parent_id');
+    }
+
     // Accessor Helper Methods
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
+
 }
