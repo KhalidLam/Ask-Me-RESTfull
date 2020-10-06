@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Question;
+use App\Tag;
 use Illuminate\Http\Request;
 use App\Http\Requests\AskQuestionRequest;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +55,30 @@ class QuestionsController extends Controller
         //     ], 401);
         // }
 
+        // dd($request->get('tags'));
+
         $question = Auth::user()->questions()->create($request->only('title', 'body'));
+
+        if($question)
+        {
+            $tagNames = explode(',',$request->get('tags'));
+            $tagIds = [];
+            foreach($tagNames as $tagName)
+            {
+                // $question->tags()->create(['tagname'=>$tagName]);
+                //Or to take care of avoiding duplication of Tag
+                //you could substitute the above line as
+                $tag = Tag::firstOrCreate(['tagname'=>$tagName]);
+                if($tag)
+                {
+                  $tagIds[] = $tag->id;
+                }
+
+            }
+            $question->tags()->sync($tagIds);
+        }
+
+
         return response()->json([
             'message' => 'Your question has been Stored.',
             'result' => $question

@@ -48,7 +48,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Answers Route
     Route::post('/answers/{slug}', 'AnswerController@store')->name('answers.store');
     Route::delete('/answers/{answer}', 'AnswerController@destroy')->name('answers.destroy');
-
 });
 
 
@@ -62,3 +61,7 @@ Route::get('/comments/{slug}', 'CommentController@show')->name('comments.show');
 // Answers Route
 Route::get('/answers/{slug}', 'AnswerController@show')->name('answers.show');
 
+
+// Tags Route
+Route::get('/tags', 'TagController@index')->name('tags.index');
+Route::get('/tags/{tagname}', 'TagController@show')->name('tags.show');

@@ -10,7 +10,7 @@ class Question extends Model
 
     //
     protected $fillable = ['title', 'body'];
-    // protected $with = ['comments'];
+    protected $with = ['tags'];
 
 
     // Relationship methods
@@ -22,6 +22,11 @@ class Question extends Model
     public function answers()
     {
         return $this->hasMany('App\Answer');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
     }
 
     public function comments()
